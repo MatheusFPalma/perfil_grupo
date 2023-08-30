@@ -1,35 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from "react";
+import About from "./components/About/About";
+import Card from "./components/Cards/Cards";
+import navigation from "./config/navigation";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [showAbout, setShowAbout] = useState(false);
+  const [selectedPersonagem, setSelectedPersonagem] = useState("");
+
+  useEffect(() => {
+    if (showAbout) {
+      console.log("About foi exibido!");
+    }
+  }, [showAbout]);
+
+  const handleCardClick = (personagem) => {
+    setSelectedPersonagem(personagem);
+    setShowAbout(true);
+  };
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {showAbout ? (
+        <>
+          <div>
+            {navigation.map((item) => {
+              return (
+                <Card
+                  key={item.key}
+                  titulo={item.nome}
+                  background={item.backgroundColor}
+                  onClick={() => handleCardClick(item.personagem)}
+                />
+              );
+            })}
+          </div>
+          <About personagem={selectedPersonagem} />
+        </>
+      ) : (
+        <div>
+          {navigation.map((item) => {
+            return (
+              <Card
+                key={item.key}
+                titulo={item.nome}
+                background={item.backgroundColor}
+                onClick={() => handleCardClick(item.personagem)}
+              />
+            );
+          })}
+        </div>
+      )}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
